@@ -44,6 +44,7 @@ class ProductController extends BaseController
             $total_quantity_by_unit_id = $this->calculateTotalQuantityByUnitId($product, $unit_id);
             
             // $product->getTotalQuantityByUnitIdAttribute($unit_id);
+            // return $this->sendResponse($product, "success");      
 
             return $this->sendResponse([
                 "name" => $product->name,
