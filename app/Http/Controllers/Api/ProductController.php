@@ -37,19 +37,19 @@ class ProductController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $unit_id = null)
+    public function show($id, $unit_id)
     {
         $product = Product::where('id','=',$id)->with('imagePath')->first();
         if ($unit_id) {
-            $total_quantity_by_unit_id = $this->calculateTotalQuantityByUnitId($product, $unit_id);
+            // $total_quantity_by_unit_id = $this->calculateTotalQuantityByUnitId($product, $unit_id);
             
-            // $product->getTotalQuantityByUnitIdAttribute($unit_id);
-            // return $this->sendResponse($product, "success");      
+            $product->getTotalQuantityByUnitAttribute($unit_id);
+            return $this->sendResponse($product, "success");      
 
-            return $this->sendResponse([
-                "name" => $product->name,
-                "total_quantity_by_unit_id" => $total_quantity_by_unit_id,
-            ], "success");      
+            // return $this->sendResponse([
+            //     "name" => $product->name,
+            //     "total_quantity_by_unit_id" => $total_quantity_by_unit_id,
+            // ], "success");      
         }
 
         return $this->sendResponse($product, "success");      

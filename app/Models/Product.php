@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
-{
+{ 
     use HasFactory;
 
     protected $fillable = [
         'name'
     ];
 
-    protected $hidden = [ 
-        'total_quantity_by_unit_id' 
-    ];
+    // protected $hidden = [ 
+    //     'total_quantity_by_unit_id' 
+    // ];
 
     protected $appends = [
         'total_quantity',
         'image_path',
-        'total_quantity_by_unit_id'
+        // 'total_quantity_by_unit_id'
     ];
 
     public function units()
@@ -37,23 +37,21 @@ class Product extends Model
         return array_sum ($items);
     }
 
-    public function getTotalQuantityByUnitIdAttribute($unit_id)
+    public function getTotalQuantityByUnitAttribute($unit_id)
     {
-        //$unit_id has two value,one of them is null
-        //I didn't know the reson for the recurrence, I'm soory 
-        $this->setAttributeVisibility();
+        // $this->setAttributeVisibility();
         foreach ($this->units()->get() as $unit) {
             $items[] = $unit->modifier * $unit->pivot->amount;
         }
-        $required_unit = Unit::where('id',"=", $unit_id)->first();
-
-        return array_sum($items) / $required_unit->modifier;
+        Unit::where('id', "=", $unit_id)->get()->map(function ($required_unit) use ($items) {
+          return $this->total_quantity_by_unit_id =  array_sum($items) / $required_unit->modifier;
+        });
     }
 
-    public function setAttributeVisibility()
-    {
-        $this->makeVisible(array_merge($this->fillable, $this->appends, ['total_quantity_by_unit_id']));
-    }
+    // public function setAttributeVisibility()
+    // {
+    //     $this->makeVisible(array_merge($this->fillable, $this->appends, ['total_quantity_by_unit_id']));
+    // }
 
     public function getImagePathAttribute()
     {
