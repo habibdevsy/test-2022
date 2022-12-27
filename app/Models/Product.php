@@ -60,6 +60,6 @@ class Product extends Model
 
     public function imagePath()
     {
-        return $this->hasOne(Image::class, 'o_id');
+        return $this->hasOne(Image::class, 'o_id')->where('o_type','product');
     }
 }

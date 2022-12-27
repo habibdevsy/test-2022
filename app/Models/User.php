@@ -53,6 +53,6 @@ class User extends Authenticatable
 
     public function imagePath()
     {
-        return $this->hasOne(Image::class, 'o_id');
+        return $this->hasOne(Image::class, 'o_id')->where('o_type','user');
     }
 }
